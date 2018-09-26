@@ -12,8 +12,8 @@ if(len(sys.argv) < 2):
 
 path = sys.argv[1]
 
-clf_sbp = RandomForestRegressor()
-clf_dbp = RandomForestRegressor()
+clf_sbp = RandomForestRegressor(n_estimators=2000)
+clf_dbp = RandomForestRegressor(n_estimators=2000)
 
 print(clf_sbp)
 
@@ -32,9 +32,8 @@ for file in os.listdir(path):
 	y_d += [y_local[1]]*len(X_local)
 
 	count += 1
-	if(count %50 == 0):
+	if(count %100 == 0):
 		print("completed {} files".format(count))
-		break
 
 print("done accumulating data....")
 
@@ -56,8 +55,8 @@ print("done accumulating data....")
 
 
 
-score_s = cross_val_score(clf_sbp, X, y_s, cv=2, scoring='neg_mean_squared_error')
-score_d = cross_val_score(clf_dbp, X, y_d, cv=2, scoring='neg_mean_squared_error')
+score_s = cross_val_score(clf_sbp, X, y_s, cv=4, scoring='neg_mean_squared_error')
+score_d = cross_val_score(clf_dbp, X, y_d, cv=4, scoring='neg_mean_squared_error')
 
 print(score_s.mean())
 print(score_d.mean())
