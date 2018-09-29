@@ -7,7 +7,8 @@ from sklearn.model_selection import KFold
 from sklearn.model_selection import cross_val_score
 
 if(len(sys.argv) < 2):
-	print("Usage: python3 regression.py path_to_data")
+	print("Usage: python3 regression.py path_to_data number_of_samples_to_use")
+	print("Example: python3 regression.py data/  200")
 	exit(0)
 
 path = sys.argv[1]
