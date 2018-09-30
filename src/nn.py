@@ -8,6 +8,7 @@ from sklearn.model_selection import cross_val_score
 from sklearn.linear_model import LinearRegression
 from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import GradientBoostingRegressor
 
 if(len(sys.argv) < 2):
 	print("Usage: python3 regression.py path_to_data [number_of_samples_to_use]")
@@ -48,6 +49,12 @@ clf_dbp.append(LinearRegression(copy_X=True, fit_intercept=True, n_jobs=4, norma
 clf_sbp.append(SVR(tol=1e-8))
 clf_dbp.append(SVR(tol=1e-8))
 
+clf_sbp.append(RandomForestRegressor(n_jobs=4, warm_start=True))
+clf_dbp.append(RandomForestRegressor(n_jobs=4, warm_start=True))
+
+clf_sbp.append(GradientBoostingRegressor(warm_start=True))
+clf_dbp.append(GradientBoostingRegressor(warm_start=True))
+
 print(clf_sbp)
 
 X=np.empty((0,2))
@@ -60,10 +67,10 @@ for file in os.listdir(path):
 	data = np.loadtxt(path+'/'+file, delimiter=',', dtype='int')
 	y_local = data[0]
 
-	to_discard = 5000
+	to_discard = 2**13
 	while (len(data) <= to_discard):
 		to_discard /= 2
-	X_local = data[to_discard:]
+	X_local = data[to_discard:len(data)-2000]
 
 	X_local = (np.array(X_local)-np.mean(X_local, axis=0))/(np.max(X_local)-np.min(X_local))  # normalization
 
@@ -76,6 +83,9 @@ for file in os.listdir(path):
 	#train on half of the data
 	if(random.random() < 0.5):
 		for i in range(NUMBER_OF_CLF):
+			if(i >= NUMBER_OF_CLF-2):
+				clf_sbp[i].n_estimators += 5
+				clf_dbp[i].n_estimators += 5
 			clf_sbp[i].fit(X_local, y_s)
 			clf_dbp[i].fit(X_local, y_d)
 
@@ -85,7 +95,7 @@ for file in os.listdir(path):
 	if(count > MAX_FILE_COUNT):
 		break
 
-print("done training on the data on the intermediate clfs....")
+print("done training of intermediate clfs...")
 
 
 
@@ -123,10 +133,10 @@ for file in os.listdir(path):
 	data = np.loadtxt(path+'/'+file, delimiter=',', dtype='int')
 	y_local = data[0]
 
-	to_discard = 5000
+	to_discard = 2**13
 	while (len(data) <= to_discard):
 		to_discard /= 2
-	X_local = data[to_discard:]
+	X_local = data[to_discard:len(data)-2000]
 
 	X_local = (np.array(X_local)-np.mean(X_local, axis=0))/(np.max(X_local)-np.min(X_local))  # normalization
 	y_s = y_local[0]
