@@ -30,9 +30,13 @@ count = 0
 for file in os.listdir(path):
 	data = np.loadtxt(path+'/'+file, delimiter=',', dtype='int')
 	y_local = data[0]
-	X_local = data[1:]
 
-	X_local = (np.array(X_local)-np.mean(X_local, axis=0))/np.std(X_local, axis=0)  # normalization
+	to_discard = 5000
+	while (len(data) <= to_discard):
+		to_discard /= 2
+	X_local = data[to_discard:]
+
+	X_local = (np.array(X_local)-np.mean(X_local, axis=0))/(np.max(X_local)-np.min(X_local))  # normalization
 
 	# print(X_local) # okay, checked
 
@@ -74,27 +78,27 @@ print("done training on the data....")
 
 mse = 0
 count = 0
-total_datapoints = 0
 for file in os.listdir(path):
 	data = np.loadtxt(path+'/'+file, delimiter=',', dtype='int')
 	y_local = data[0]
 	X_local = data[1:]
 
-	X_local = (np.array(X_local)-np.mean(X_local, axis=0))/np.std(X_local, axis=0)  # normalization
-	y_s = [y_local[0]]*len(X_local)
-	y_d = [y_local[1]]*len(X_local)
+	X_local = (np.array(X_local)-np.mean(X_local, axis=0))/(np.max(X_local)-np.min(X_local))  # normalization
+	y_s = y_local[0]
+	y_d = y_local[1]
 
-	y_s_pred = clf_sbp.predict(X_local)
-	y_d_pred = clf_dbp.predict(X_local)
+	y_s_pred = np.mean(clf_sbp.predict(X_local))
+	y_d_pred = np.mean(clf_dbp.predict(X_local))
 
-	mse += np.sum((y_s_pred - y_s)**2) + 2*np.sum((y_d_pred - y_d)**2)
+
+	
+	mse += (y_s_pred - y_s)**2 + 2*((y_d_pred - y_d)**2)
 
 
 	count += 1
-	total_datapoints += len(X_local)
 	if(count % 100 == 0):
 		print("completed {} files".format(count))
 	if(count > MAX_FILE_COUNT):
 		break
 
-print("MSE:", mse/total_datapoints)
+print("MSE:", mse/count)
