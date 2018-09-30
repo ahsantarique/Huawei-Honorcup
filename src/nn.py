@@ -18,7 +18,7 @@ if(len(sys.argv) < 2):
 MAX_FILE_COUNT = 1e8
 DISCARD_FRONT = 2**13
 DISCARD_BACK = 5000
-TRAIN_TEST_RATIO = 0.4
+TRAIN_TEST_RATIO = 0.5
 
 
 path = sys.argv[1]
@@ -46,6 +46,62 @@ clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', 
        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
        verbose=False, warm_start=True))
 
+#####################################################################################################
+clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+       beta_2=0.999, early_stopping=False, epsilon=1e-08,
+       hidden_layer_sizes=(8,8,8), learning_rate='adaptive',
+       learning_rate_init=0.0001, max_iter=10000, momentum=0.9,
+       nesterovs_momentum=True, power_t=0.5, random_state=None,
+       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+       verbose=False, warm_start=True) )
+
+clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+       beta_2=0.999, early_stopping=False, epsilon=1e-08,
+       hidden_layer_sizes=(8,8,8), learning_rate='adaptive',
+       learning_rate_init=0.0001, max_iter=10000, momentum=0.9,
+       nesterovs_momentum=True, power_t=0.5, random_state=None,
+       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+       verbose=False, warm_start=True))
+
+#####################################################################################################
+
+clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+       beta_2=0.999, early_stopping=False, epsilon=1e-08,
+       hidden_layer_sizes=(4,4,4), learning_rate='adaptive',
+       learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
+       nesterovs_momentum=True, power_t=0.5, random_state=None,
+       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+       verbose=False, warm_start=True) )
+
+clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+       beta_2=0.999, early_stopping=False, epsilon=1e-08,
+       hidden_layer_sizes=(4,4,4), learning_rate='adaptive',
+       learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
+       nesterovs_momentum=True, power_t=0.5, random_state=None,
+       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+       verbose=False, warm_start=True))
+
+
+#####################################################################################################
+clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+       beta_2=0.999, early_stopping=False, epsilon=1e-08,
+       hidden_layer_sizes=(16,16,16), learning_rate='adaptive',
+       learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
+       nesterovs_momentum=True, power_t=0.5, random_state=None,
+       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+       verbose=False, warm_start=True) )
+
+clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+       beta_2=0.999, early_stopping=False, epsilon=1e-08,
+       hidden_layer_sizes=(16,16,16), learning_rate='adaptive',
+       learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
+       nesterovs_momentum=True, power_t=0.5, random_state=None,
+       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+       verbose=False, warm_start=True))
+
+
+#####################################################################################################
+
 
 clf_sbp.append(LinearRegression(copy_X=True, fit_intercept=True, n_jobs=4, normalize=True))
 clf_dbp.append(LinearRegression(copy_X=True, fit_intercept=True, n_jobs=4, normalize=True))
@@ -53,8 +109,8 @@ clf_dbp.append(LinearRegression(copy_X=True, fit_intercept=True, n_jobs=4, norma
 clf_sbp.append(SVR(tol=1e-8))
 clf_dbp.append(SVR(tol=1e-8))
 
-clf_sbp.append(RandomForestRegressor(n_jobs=4, warm_start=True))
-clf_dbp.append(RandomForestRegressor(n_jobs=4, warm_start=True))
+clf_sbp.append(RandomForestRegressor(n_estimators=500, n_jobs=4, warm_start=True))
+clf_dbp.append(RandomForestRegressor(n_estimators=500, n_jobs=4, warm_start=True))
 
 clf_sbp.append(GradientBoostingRegressor(warm_start=True))
 clf_dbp.append(GradientBoostingRegressor(warm_start=True))
