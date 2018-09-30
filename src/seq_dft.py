@@ -32,21 +32,21 @@ random.seed(42)
 clf_sbp = []
 clf_dbp = []
 
-clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
-       beta_2=0.999, early_stopping=False, epsilon=1e-08,
-       hidden_layer_sizes=(64, 64, 64), learning_rate='adaptive',
-       learning_rate_init=0.0001, max_iter=10000, momentum=0.9,
-       nesterovs_momentum=True, power_t=0.5, random_state=None,
-       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
-       verbose=False, warm_start=True) )
+# clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+#        beta_2=0.999, early_stopping=False, epsilon=1e-08,
+#        hidden_layer_sizes=(100, 100, 100), learning_rate='adaptive',
+#        learning_rate_init=0.0001, max_iter=10000, momentum=0.9,
+#        nesterovs_momentum=True, power_t=0.5, random_state=None,
+#        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+#        verbose=False, warm_start=True) )
 
-clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
-       beta_2=0.999, early_stopping=False, epsilon=1e-08,
-       hidden_layer_sizes=(64, 64, 64), learning_rate='adaptive',
-       learning_rate_init=0.0001, max_iter=10000, momentum=0.9,
-       nesterovs_momentum=True, power_t=0.5, random_state=None,
-       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
-       verbose=False, warm_start=True))
+# clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+#        beta_2=0.999, early_stopping=False, epsilon=1e-08,
+#        hidden_layer_sizes=(100, 100, 100), learning_rate='adaptive',
+#        learning_rate_init=0.0001, max_iter=10000, momentum=0.9,
+#        nesterovs_momentum=True, power_t=0.5, random_state=None,
+#        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+#        verbose=False, warm_start=True))
 
 # #####################################################################################################
 # clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
@@ -108,14 +108,14 @@ clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', 
 clf_sbp.append(LinearRegression(copy_X=True, fit_intercept=True, n_jobs=4, normalize=True))
 clf_dbp.append(LinearRegression(copy_X=True, fit_intercept=True, n_jobs=4, normalize=True))
 
-clf_sbp.append(SVR(tol=1e-8))
-clf_dbp.append(SVR(tol=1e-8))
+# clf_sbp.append(SVR(tol=1e-8))
+# clf_dbp.append(SVR(tol=1e-8))
 
-clf_sbp.append(RandomForestRegressor(n_estimators=10000, n_jobs=4 ))
-clf_dbp.append(RandomForestRegressor(n_estimators=10000, n_jobs=4))
+# clf_sbp.append(RandomForestRegressor(n_estimators=50000, n_jobs=4 ))
+# clf_dbp.append(RandomForestRegressor(n_estimators=50000, n_jobs=4))
 
-clf_sbp.append(GradientBoostingRegressor(n_estimators=500))
-clf_dbp.append(GradientBoostingRegressor(n_estimators=500))
+# clf_sbp.append(GradientBoostingRegressor(n_estimators=50000))
+# clf_dbp.append(GradientBoostingRegressor(n_estimators=50000))
 
 X=np.empty((0, ECG_DATA_POINTS + PPG_DATA_POINTS))
 y_s=[]
@@ -173,31 +173,43 @@ print("done accumulating data...")
 
 # print("training done for the final clf")
 
-# kf = KFold(n_splits = 5)
-# for train_index, test_index in kf.split(X):
-# 	#print("TRAIN:", train_index, "TEST:", test_index)
-# 	X_train, X_test = X[train_index], X[test_index]
-# 	y_s_train, y_s_test = y_s[train_index], y_s[test_index]
-# 	y_d_train, y_d_test = y_d[train_index], y_d[test_index]
+
+
+
+print("*************************** MEAN PREDICTION ***************************")
+kf = KFold(n_splits = 5)
+y_s = np.array(y_s)
+y_d = np.array(y_d)
+for train_index, test_index in kf.split(X):
+	#print("TRAIN:", train_index, "TEST:", test_index)
+	X_train, X_test = X[train_index], X[test_index]
+	y_s_train, y_s_test = y_s[train_index], y_s[test_index]
+	y_d_train, y_d_test = y_d[train_index], y_d[test_index]
 	
-# for i in range(NUMBER_OF_CLF):
-#     # if(i >= NUMBER_OF_CLF-2):
-#     # 	clf_sbp[i].n_estimators += 5
-#     # 	clf_dbp[i].n_estimators += 5
-#     clf_sbp[i].fit(X, y_s)
-#     clf_dbp[i].fit(X, y_d)
+	for i in range(NUMBER_OF_CLF):
+	    # if(i >= NUMBER_OF_CLF-2):
+	    # 	clf_sbp[i].n_estimators += 5
+	    # 	clf_dbp[i].n_estimators += 5
+		clf_sbp[i].fit(X_train, y_s_train)
+		clf_dbp[i].fit(X_train, y_d_train)
+	y_s_pred = np.mean([np.mean(clf_sbp[i].predict(X_test)) for i in range(NUMBER_OF_CLF)])
+	y_d_pred = np.mean([np.mean(clf_dbp[i].predict(X_test)) for i in range(NUMBER_OF_CLF)])
 
-# 	y_s_pred = clf_sbp.predict(X_test)
-# 	y_d_pred = clf_dbp.predict(X_test)
+	mse = np.mean((y_s_pred - y_s)**2 + 2*((y_d_pred - y_d)**2))
+	print("MSE:", mse)
 
+
+
+print("******************************* SEPERATELY ******************************************")
 
 for i in range(NUMBER_OF_CLF):
 	print("****************************************************************************")
-	print(clf_sbp[i])
-	score_s = cross_val_score(clf_sbp[i], X, y_s, cv=2, scoring='neg_mean_squared_error')
-	score_d = cross_val_score(clf_dbp[i], X, y_d, cv=2, scoring='neg_mean_squared_error')
+	print(clf_sbp[i],"\n")
+	score_s = cross_val_score(clf_sbp[i], X, y_s, cv=5, scoring='neg_mean_squared_error')
+	score_d = cross_val_score(clf_dbp[i], X, y_d, cv=5, scoring='neg_mean_squared_error')
 	print(score_s)
 	print(score_d)
+	print("****************************************************************************")
 
 # mse = 0
 # count = 0
