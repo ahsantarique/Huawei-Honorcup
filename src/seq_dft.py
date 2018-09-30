@@ -17,7 +17,7 @@ if(len(sys.argv) < 2):
 
 MAX_FILE_COUNT = 1e8
 DISCARD_FRONT = 4000
-ECG_DATA_POINTS = 50
+ECG_DATA_POINTS = 80
 PPG_DATA_POINTS = 20
 # DISCARD_BACK = 5000
 TRAIN_TEST_RATIO = 0.5
@@ -32,21 +32,21 @@ random.seed(42)
 clf_sbp = []
 clf_dbp = []
 
-# clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
-#        beta_2=0.999, early_stopping=False, epsilon=1e-08,
-#        hidden_layer_sizes=(32, 32, 32), learning_rate='adaptive',
-#        learning_rate_init=0.0001, max_iter=10000, momentum=0.9,
-#        nesterovs_momentum=True, power_t=0.5, random_state=None,
-#        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
-#        verbose=False, warm_start=True) )
+clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+       beta_2=0.999, early_stopping=False, epsilon=1e-08,
+       hidden_layer_sizes=(64, 64, 64), learning_rate='adaptive',
+       learning_rate_init=0.0001, max_iter=10000, momentum=0.9,
+       nesterovs_momentum=True, power_t=0.5, random_state=None,
+       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+       verbose=False, warm_start=True) )
 
-# clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
-#        beta_2=0.999, early_stopping=False, epsilon=1e-08,
-#        hidden_layer_sizes=(32, 32, 32), learning_rate='adaptive',
-#        learning_rate_init=0.0001, max_iter=10000, momentum=0.9,
-#        nesterovs_momentum=True, power_t=0.5, random_state=None,
-#        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
-#        verbose=False, warm_start=True))
+clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+       beta_2=0.999, early_stopping=False, epsilon=1e-08,
+       hidden_layer_sizes=(64, 64, 64), learning_rate='adaptive',
+       learning_rate_init=0.0001, max_iter=10000, momentum=0.9,
+       nesterovs_momentum=True, power_t=0.5, random_state=None,
+       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+       verbose=False, warm_start=True))
 
 # #####################################################################################################
 # clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
@@ -105,19 +105,17 @@ clf_dbp = []
 # #####################################################################################################
 
 
-# clf_sbp.append(LinearRegression(copy_X=True, fit_intercept=True, n_jobs=4, normalize=True))
-# clf_dbp.append(LinearRegression(copy_X=True, fit_intercept=True, n_jobs=4, normalize=True))
+clf_sbp.append(LinearRegression(copy_X=True, fit_intercept=True, n_jobs=4, normalize=True))
+clf_dbp.append(LinearRegression(copy_X=True, fit_intercept=True, n_jobs=4, normalize=True))
 
-# clf_sbp.append(SVR(tol=1e-8))
-# clf_dbp.append(SVR(tol=1e-8))
+clf_sbp.append(SVR(tol=1e-8))
+clf_dbp.append(SVR(tol=1e-8))
 
-clf_sbp.append(RandomForestRegressor(n_estimators=5000, n_jobs=4 ))
-clf_dbp.append(RandomForestRegressor(n_estimators=5000, n_jobs=4))
+clf_sbp.append(RandomForestRegressor(n_estimators=10000, n_jobs=4 ))
+clf_dbp.append(RandomForestRegressor(n_estimators=10000, n_jobs=4))
 
-clf_sbp.append(GradientBoostingRegressor())
-clf_dbp.append(GradientBoostingRegressor())
-
-print(clf_sbp)
+clf_sbp.append(GradientBoostingRegressor(n_estimators=500))
+clf_dbp.append(GradientBoostingRegressor(n_estimators=500))
 
 X=np.empty((0, ECG_DATA_POINTS + PPG_DATA_POINTS))
 y_s=[]
@@ -126,7 +124,9 @@ y_d=[]
 
 count = 0
 NUMBER_OF_CLF = len(clf_sbp)
-for file in os.listdir(path):
+files = os.listdir(path)
+random.shuffle(files)
+for file in files:
 	data = np.loadtxt(path+'/'+file, delimiter=',', dtype='int')
 	y_local = data[0]
 
@@ -192,8 +192,10 @@ print("done accumulating data...")
 
 
 for i in range(NUMBER_OF_CLF):
-	score_s = cross_val_score(clf_sbp[0], X, y_s, cv=2, scoring='neg_mean_squared_error')
-	score_d = cross_val_score(clf_dbp[0], X, y_d, cv=2, scoring='neg_mean_squared_error')
+	print("****************************************************************************")
+	print(clf_sbp[i])
+	score_s = cross_val_score(clf_sbp[i], X, y_s, cv=2, scoring='neg_mean_squared_error')
+	score_d = cross_val_score(clf_dbp[i], X, y_d, cv=2, scoring='neg_mean_squared_error')
 	print(score_s)
 	print(score_d)
 
