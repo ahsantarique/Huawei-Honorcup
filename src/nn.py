@@ -16,6 +16,10 @@ if(len(sys.argv) < 2):
 	exit(0)
 
 MAX_FILE_COUNT = 1e8
+DISCARD_FRONT = 2**13
+DISCARD_BACK = 5000
+TRAIN_TEST_RATIO = 0.4
+
 
 path = sys.argv[1]
 if(len(sys.argv) > 2):
@@ -61,16 +65,17 @@ X=np.empty((0,2))
 y_s=[]
 y_d=[]
 
+
 count = 0
 NUMBER_OF_CLF = len(clf_sbp)
 for file in os.listdir(path):
 	data = np.loadtxt(path+'/'+file, delimiter=',', dtype='int')
 	y_local = data[0]
 
-	to_discard = 2**13
+	to_discard = DISCARD_FRONT
 	while (len(data) <= to_discard):
 		to_discard /= 2
-	X_local = data[to_discard:len(data)-2000]
+	X_local = data[to_discard:len(data)-DISCARD_BACK]
 
 	X_local = (np.array(X_local)-np.mean(X_local, axis=0))/(np.max(X_local)-np.min(X_local))  # normalization
 
@@ -81,7 +86,7 @@ for file in os.listdir(path):
 	y_d = [y_local[1]]*len(X_local)
 
 	#train on half of the data
-	if(random.random() < 0.5):
+	if(random.random() < TRAIN_TEST_RATIO):
 		for i in range(NUMBER_OF_CLF):
 			if(i >= NUMBER_OF_CLF-2):
 				clf_sbp[i].n_estimators += 5
@@ -133,10 +138,10 @@ for file in os.listdir(path):
 	data = np.loadtxt(path+'/'+file, delimiter=',', dtype='int')
 	y_local = data[0]
 
-	to_discard = 2**13
+	to_discard = DISCARD_FRONT
 	while (len(data) <= to_discard):
 		to_discard /= 2
-	X_local = data[to_discard:len(data)-2000]
+	X_local = data[to_discard:len(data)-DISCARD_BACK]
 
 	X_local = (np.array(X_local)-np.mean(X_local, axis=0))/(np.max(X_local)-np.min(X_local))  # normalization
 	y_s = y_local[0]
