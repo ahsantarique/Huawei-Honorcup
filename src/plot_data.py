@@ -13,11 +13,21 @@ if(len(sys.argv) < 2):
 path = sys.argv[1]
 
 def plot(X, name):
-    fig = plt.figure()
     plt.title(name)
     plt.plot(X, 'y-')
     plt.show()
 
+
+def fftplot(data, name):
+    rate = 500
+    spectre = np.fft.fft(data)
+    freq = np.fft.fftfreq(data.size, 1/rate)
+    mask=freq>0   
+    plt.plot(freq[mask],np.abs(spectre[mask]))
+    plt.title(name)
+    plt.show()
+
+    
 def loadData(path):
     for file in os.listdir(path):
         data = np.loadtxt(path+'/'+file, delimiter=',', dtype='int')
@@ -28,8 +38,8 @@ def loadData(path):
 
         # X_local = (np.array(X_local)-np.mean(X_local, axis=0))/(np.max(X_local)-np.min(X_local))  # normalization
         # print(X_local) # okay, checked
-        plot(ecg, 'ecg')
-        plot(ppg, 'ppg')
+        fftplot(ecg, 'ecg')
+        fftplot(ppg, 'ppg')
 
 
 if(__name__=="__main__"):
