@@ -1,6 +1,7 @@
 import sys
 import os
 import random
+import gc
 import numpy as np
 from sklearn.neural_network import MLPRegressor
 from sklearn.model_selection import KFold
@@ -48,74 +49,99 @@ clf_dbp = []
 #        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
 #        verbose=False, warm_start=True))
 
+#####################################################################################################
+clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+       beta_2=0.999, early_stopping=False, epsilon=1e-08,
+       hidden_layer_sizes=(64,64,64), learning_rate='adaptive',
+       learning_rate_init=0.0001, max_iter=10000, momentum=0.9,
+       nesterovs_momentum=True, power_t=0.5, random_state=None,
+       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+       verbose=False, warm_start=True) )
+
+clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+       beta_2=0.999, early_stopping=False, epsilon=1e-08,
+       hidden_layer_sizes=(64,64,64), learning_rate='adaptive',
+       learning_rate_init=0.0001, max_iter=10000, momentum=0.9,
+       nesterovs_momentum=True, power_t=0.5, random_state=None,
+       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+       verbose=False, warm_start=True))
+
+#####################################################################################################
+gc.collect()
+
+clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+       beta_2=0.999, early_stopping=False, epsilon=1e-08,
+       hidden_layer_sizes=(32,32,32), learning_rate='adaptive',
+       learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
+       nesterovs_momentum=True, power_t=0.5, random_state=None,
+       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+       verbose=False, warm_start=True) )
+
+clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+       beta_2=0.999, early_stopping=False, epsilon=1e-08,
+       hidden_layer_sizes=(32,32,32), learning_rate='adaptive',
+       learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
+       nesterovs_momentum=True, power_t=0.5, random_state=None,
+       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+       verbose=False, warm_start=True))
+
+
+#####################################################################################################
+gc.collect()
+clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+       beta_2=0.999, early_stopping=False, epsilon=1e-08,
+       hidden_layer_sizes=(16,16,16), learning_rate='adaptive',
+       learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
+       nesterovs_momentum=True, power_t=0.5, random_state=None,
+       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+       verbose=False, warm_start=True) )
+
+clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+       beta_2=0.999, early_stopping=False, epsilon=1e-08,
+       hidden_layer_sizes=(16,16,16), learning_rate='adaptive',
+       learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
+       nesterovs_momentum=True, power_t=0.5, random_state=None,
+       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+       verbose=False, warm_start=True))
+
+
 # #####################################################################################################
-# clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
-#        beta_2=0.999, early_stopping=False, epsilon=1e-08,
-#        hidden_layer_sizes=(8,8,8), learning_rate='adaptive',
-#        learning_rate_init=0.0001, max_iter=10000, momentum=0.9,
-#        nesterovs_momentum=True, power_t=0.5, random_state=None,
-#        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
-#        verbose=False, warm_start=True) )
+gc.collect()
+clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+       beta_2=0.999, early_stopping=False, epsilon=1e-08,
+       hidden_layer_sizes=(8,8,8), learning_rate='adaptive',
+       learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
+       nesterovs_momentum=True, power_t=0.5, random_state=None,
+       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+       verbose=False, warm_start=True) )
 
-# clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
-#        beta_2=0.999, early_stopping=False, epsilon=1e-08,
-#        hidden_layer_sizes=(8,8,8), learning_rate='adaptive',
-#        learning_rate_init=0.0001, max_iter=10000, momentum=0.9,
-#        nesterovs_momentum=True, power_t=0.5, random_state=None,
-#        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
-#        verbose=False, warm_start=True))
-
-# #####################################################################################################
-
-# clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
-#        beta_2=0.999, early_stopping=False, epsilon=1e-08,
-#        hidden_layer_sizes=(4,4,4), learning_rate='adaptive',
-#        learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
-#        nesterovs_momentum=True, power_t=0.5, random_state=None,
-#        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
-#        verbose=False, warm_start=True) )
-
-# clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
-#        beta_2=0.999, early_stopping=False, epsilon=1e-08,
-#        hidden_layer_sizes=(4,4,4), learning_rate='adaptive',
-#        learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
-#        nesterovs_momentum=True, power_t=0.5, random_state=None,
-#        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
-#        verbose=False, warm_start=True))
-
-
-# #####################################################################################################
-# clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
-#        beta_2=0.999, early_stopping=False, epsilon=1e-08,
-#        hidden_layer_sizes=(16,16,16), learning_rate='adaptive',
-#        learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
-#        nesterovs_momentum=True, power_t=0.5, random_state=None,
-#        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
-#        verbose=False, warm_start=True) )
-
-# clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
-#        beta_2=0.999, early_stopping=False, epsilon=1e-08,
-#        hidden_layer_sizes=(16,16,16), learning_rate='adaptive',
-#        learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
-#        nesterovs_momentum=True, power_t=0.5, random_state=None,
-#        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
-#        verbose=False, warm_start=True))
+clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+       beta_2=0.999, early_stopping=False, epsilon=1e-08,
+       hidden_layer_sizes=(8,8,8), learning_rate='adaptive',
+       learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
+       nesterovs_momentum=True, power_t=0.5, random_state=None,
+       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+       verbose=False, warm_start=True))
 
 
 # #####################################################################################################
 
-
-clf_sbp.append(LinearRegression(copy_X=True, fit_intercept=True, n_jobs=4, normalize=True))
-clf_dbp.append(LinearRegression(copy_X=True, fit_intercept=True, n_jobs=4, normalize=True))
+# clf_sbp.append(LinearRegression(copy_X=True, fit_intercept=True, n_jobs=4, normalize=True))
+# clf_dbp.append(LinearRegression(copy_X=True, fit_intercept=True, n_jobs=4, normalize=True))
 
 # clf_sbp.append(SVR(tol=1e-8))
 # clf_dbp.append(SVR(tol=1e-8))
+gc.collect()
+clf_sbp.append(RandomForestRegressor(n_estimators=20000, n_jobs=4, max_depth=5))
+clf_dbp.append(RandomForestRegressor(n_estimators=20000, n_jobs=4, max_depth=5))
 
-# clf_sbp.append(RandomForestRegressor(n_estimators=50000, n_jobs=4 ))
-# clf_dbp.append(RandomForestRegressor(n_estimators=50000, n_jobs=4))
+gc.collect()
+clf_sbp.append(RandomForestRegressor(n_estimators=5000, n_jobs=4, max_depth=5))
+clf_dbp.append(RandomForestRegressor(n_estimators=5000, n_jobs=4, max_depth=5))
 
-# clf_sbp.append(GradientBoostingRegressor(n_estimators=50000))
-# clf_dbp.append(GradientBoostingRegressor(n_estimators=50000))
+gc.collect()
+clf_sbp.append(GradientBoostingRegressor(n_estimators=50000))
+clf_dbp.append(GradientBoostingRegressor(n_estimators=50000))
 
 X=np.empty((0, ECG_DATA_POINTS + PPG_DATA_POINTS))
 y_s=[]
@@ -168,18 +194,19 @@ for file in files:
 print("done accumulating data...")
 
 
-# clf_final_sbp = RandomForestRegressor()
-# clf_final_dbp = RandomForestRegressor()
-
-# print("training done for the final clf")
-
-
-
+clf_final_sbp = RandomForestRegressor()
+clf_final_dbp = RandomForestRegressor()
 
 print("*************************** MEAN PREDICTION ***************************")
-kf = KFold(n_splits = 5)
+kf = KFold(n_splits = 2)
 y_s = np.array(y_s)
 y_d = np.array(y_d)
+
+x_s_final_train = np.array([])
+x_d_final_train = np.array([])
+x_s_final_test = np.array([])
+x_d_final_test = np.array([])
+
 for train_index, test_index in kf.split(X):
 	#print("TRAIN:", train_index, "TEST:", test_index)
 	X_train, X_test = X[train_index], X[test_index]
@@ -192,21 +219,56 @@ for train_index, test_index in kf.split(X):
 	    # 	clf_dbp[i].n_estimators += 5
 		clf_sbp[i].fit(X_train, y_s_train)
 		clf_dbp[i].fit(X_train, y_d_train)
-	y_s_pred = np.mean([np.mean(clf_sbp[i].predict(X_test)) for i in range(NUMBER_OF_CLF)])
-	y_d_pred = np.mean([np.mean(clf_dbp[i].predict(X_test)) for i in range(NUMBER_OF_CLF)])
 
-	mse = np.mean((y_s_pred - y_s)**2 + 2*((y_d_pred - y_d)**2))
-	print("MSE:", mse)
+		####### pred on train data
+		y_s_pred_train = clf_sbp[i].predict(X_train)
+		y_d_pred_train = clf_dbp[i].predict(X_train)
+
+		######### pred on test data
+		y_s_pred_test = clf_sbp[i].predict(X_test)
+		y_d_pred_test = clf_sbp[i].predict(X_test)
+
+		print("y_s_pred_test.shape", y_s_pred_test.shape)
+		#prepare feature for final clf
+
+		np.concatenate((x_s_final_train, y_s_pred_train))
+		np.concatenate((x_d_final_train, y_d_pred_train))
+
+		np.concatenate((x_s_final_test, y_s_pred_test))
+		np.concatenate((x_d_final_test, y_d_pred_test))
+
+		print("****************************************************************************")
+		print(clf_sbp[i],"\n")
+		print("clf", i)
+
+		mse_s_train = np.mean((y_s_pred_train - y_s_train)**2)
+		mse_d_train = np.mean((y_d_pred_train - y_d_train)**2)
+		print("TRAINING: MSE (sbp) :", mse_s_train, " MSE (dbp):", mse_d_train)
+
+		mse_s_test = np.mean((y_s_pred_test - y_s_test)**2)
+		mse_d_test = np.mean((y_d_pred_test - y_d_test)**2)
+		print("TEST: MSE (sbp):", mse_s_test, " MSE (dbp):", mse_d_test)
+
+###################################################################################################
+np.reshape(x_s_final, (NUMBER_OF_CLF,-1))
+x_s_final = x_s_final.transpose()
+
+np.reshape(x_d_final, (NUMBER_OF_CLF,-1))
+x_d_final = x_d_final.transpose()
+
+clf
+
+print("training done for the final clf")
 
 
-
-print("******************************* SEPERATELY ******************************************")
+print("******************************* SEPERATELY, for the sake of checking the code above ******************************************")
 
 for i in range(NUMBER_OF_CLF):
 	print("****************************************************************************")
 	print(clf_sbp[i],"\n")
-	score_s = cross_val_score(clf_sbp[i], X, y_s, cv=5, scoring='neg_mean_squared_error')
-	score_d = cross_val_score(clf_dbp[i], X, y_d, cv=5, scoring='neg_mean_squared_error')
+	print("clf", i)
+	score_s = cross_val_score(clf_sbp[i], X, y_s, cv=2, scoring='neg_mean_squared_error')
+	score_d = cross_val_score(clf_dbp[i], X, y_d, cv=2, scoring='neg_mean_squared_error')
 	print(score_s)
 	print(score_d)
 	print("****************************************************************************")
