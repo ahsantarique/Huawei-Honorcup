@@ -11,6 +11,7 @@ from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.externals import joblib
+from sklearn.neighbors import KNeighborsRegressor as KNNR
 
 if(len(sys.argv) < 2):
 	print("Usage: python3 regression.py path_to_data [number_of_samples_to_use]")
@@ -19,7 +20,8 @@ if(len(sys.argv) < 2):
 
 MAX_FILE_COUNT = 1e8
 DISCARD_FRONT = 4000
-ECG_DATA_POINTS = 80
+ECG_DATA_POINTS = 60
+print("ECG_DATA_POINTS", ECG_DATA_POINTS)
 PPG_DATA_POINTS = 20
 # DISCARD_BACK = 5000
 TRAIN_TEST_RATIO = 0.5
@@ -76,7 +78,7 @@ clf_dbp = []
 #        learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
 #        nesterovs_momentum=True, power_t=0.5, random_state=None,
 #        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
-#        verbose=False, warm_start=True) )
+#        verbose=False, warm_start=False) )
 
 # clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
 #        beta_2=0.999, early_stopping=False, epsilon=1e-08,
@@ -84,65 +86,74 @@ clf_dbp = []
 #        learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
 #        nesterovs_momentum=True, power_t=0.5, random_state=None,
 #        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
-#        verbose=False, warm_start=True))
+#        verbose=False, warm_start=False))
+
+
+####################################################################################################
+# gc.collect()
+# clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+#        beta_2=0.999, early_stopping=False, epsilon=1e-08,
+#        hidden_layer_sizes=(16,16), learning_rate='adaptive',
+#        learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
+#        nesterovs_momentum=True, power_t=0.5, random_state=None,
+#        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+#        verbose=False, warm_start=False) )
+
+# clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+#        beta_2=0.999, early_stopping=False, epsilon=1e-08,
+#        hidden_layer_sizes=(16,16), learning_rate='adaptive',
+#        learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
+#        nesterovs_momentum=True, power_t=0.5, random_state=None,
+#        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+#        verbose=False, warm_start=False))
 
 
 #####################################################################################################
 # gc.collect()
 # clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
 #        beta_2=0.999, early_stopping=False, epsilon=1e-08,
-#        hidden_layer_sizes=(16,16,16), learning_rate='adaptive',
+#        hidden_layer_sizes=(8,8), learning_rate='adaptive',
 #        learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
 #        nesterovs_momentum=True, power_t=0.5, random_state=None,
 #        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
-#        verbose=False, warm_start=True) )
+#        verbose=False, warm_start=False) )
 
 # clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
 #        beta_2=0.999, early_stopping=False, epsilon=1e-08,
-#        hidden_layer_sizes=(16,16,16), learning_rate='adaptive',
+#        hidden_layer_sizes=(8,8), learning_rate='adaptive',
 #        learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
 #        nesterovs_momentum=True, power_t=0.5, random_state=None,
 #        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
-#        verbose=False, warm_start=True))
+#        verbose=False, warm_start=False))
 
 
-# #####################################################################################################
-gc.collect()
-clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
-       beta_2=0.999, early_stopping=False, epsilon=1e-08,
-       hidden_layer_sizes=(8,8,8), learning_rate='adaptive',
-       learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
-       nesterovs_momentum=True, power_t=0.5, random_state=None,
-       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
-       verbose=False, warm_start=True) )
-
-clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
-       beta_2=0.999, early_stopping=False, epsilon=1e-08,
-       hidden_layer_sizes=(8,8,8), learning_rate='adaptive',
-       learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
-       nesterovs_momentum=True, power_t=0.5, random_state=None,
-       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
-       verbose=False, warm_start=True))
-
-
-# #####################################################################################################
+#####################################################################################################
 
 # clf_sbp.append(LinearRegression(copy_X=True, fit_intercept=True, n_jobs=4, normalize=True))
 # clf_dbp.append(LinearRegression(copy_X=True, fit_intercept=True, n_jobs=4, normalize=True))
 
 # clf_sbp.append(SVR(tol=1e-8))
 # clf_dbp.append(SVR(tol=1e-8))
-gc.collect()
-clf_sbp.append(RandomForestRegressor(n_estimators=20000, n_jobs=4, max_depth=5))
-clf_dbp.append(RandomForestRegressor(n_estimators=20000, n_jobs=4, max_depth=5))
+# gc.collect()
+# clf_sbp.append(RandomForestRegressor(n_estimators=20000, n_jobs=4, max_depth=3))
+# clf_dbp.append(RandomForestRegressor(n_estimators=20000, n_jobs=4, max_depth=3))
 
 gc.collect()
-clf_sbp.append(RandomForestRegressor(n_estimators=5000, n_jobs=4, max_depth=5))
-clf_dbp.append(RandomForestRegressor(n_estimators=5000, n_jobs=4, max_depth=5))
+clf_sbp.append(RandomForestRegressor(n_estimators=5000, n_jobs=4, max_depth=5, max_features='sqrt'))
+clf_dbp.append(RandomForestRegressor(n_estimators=5000, n_jobs=4, max_depth=5, max_features='sqrt'))
+
+# gc.collect()
+# clf_sbp.append(GradientBoostingRegressor(n_estimators=50))
+# clf_dbp.append(GradientBoostingRegressor(n_estimators=50))
 
 gc.collect()
-clf_sbp.append(GradientBoostingRegressor(n_estimators=50000))
-clf_dbp.append(GradientBoostingRegressor(n_estimators=50000))
+clf_sbp.append(KNNR(algorithm='auto', leaf_size=30, metric='minkowski',
+          metric_params=None, n_jobs=4, n_neighbors=10, p=2,
+          weights='uniform') )
+clf_dbp.append(KNNR(algorithm='auto', leaf_size=30, metric='minkowski',
+          metric_params=None, n_jobs=4, n_neighbors=10, p=2,
+          weights='uniform'))
+
 
 X=np.empty((0, ECG_DATA_POINTS + PPG_DATA_POINTS))
 y_s=[]
@@ -284,6 +295,7 @@ for train_index, test_index in kf.split(X):
 
 	print("****************************************************************************\n")
 	print("FINAL CLF")
+	print(clf_final_sbp)
 
 	mse_s_train_final = np.mean((y_s_pred_train_final - y_s_train)**2)
 	mse_d_train_final = np.mean((y_d_pred_train_final - y_d_train)**2)
