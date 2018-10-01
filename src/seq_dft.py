@@ -10,6 +10,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.externals import joblib
 
 if(len(sys.argv) < 2):
 	print("Usage: python3 regression.py path_to_data [number_of_samples_to_use]")
@@ -329,3 +330,9 @@ for i in range(NUMBER_OF_CLF):
 # 		break
 
 # print("MSE:", mse/count)
+for i in range(NUMBER_OF_CLF):
+	joblib.dump(clf_sbp[i], 'clf_sbp'+str(i)+'.pkl', compress=9)
+	joblib.dump(clf_dbp[i], 'clf_dbp'+str(i)+'.pkl', compress=9)
+
+joblib.dump(clf_final_sbp, 'clf_final_sbp.pkl', compress=9)
+joblib.dump(clf_final_dbp, 'clf_final_dbp.pkl', compress=9)
