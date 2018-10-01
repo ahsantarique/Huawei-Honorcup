@@ -50,59 +50,59 @@ clf_dbp = []
 #        verbose=False, warm_start=True))
 
 #####################################################################################################
-clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
-       beta_2=0.999, early_stopping=False, epsilon=1e-08,
-       hidden_layer_sizes=(64,64,64), learning_rate='adaptive',
-       learning_rate_init=0.0001, max_iter=10000, momentum=0.9,
-       nesterovs_momentum=True, power_t=0.5, random_state=None,
-       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
-       verbose=False, warm_start=True) )
+# clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+#        beta_2=0.999, early_stopping=False, epsilon=1e-08,
+#        hidden_layer_sizes=(64,64,64), learning_rate='adaptive',
+#        learning_rate_init=0.0001, max_iter=10000, momentum=0.9,
+#        nesterovs_momentum=True, power_t=0.5, random_state=None,
+#        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+#        verbose=False, warm_start=True) )
 
-clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
-       beta_2=0.999, early_stopping=False, epsilon=1e-08,
-       hidden_layer_sizes=(64,64,64), learning_rate='adaptive',
-       learning_rate_init=0.0001, max_iter=10000, momentum=0.9,
-       nesterovs_momentum=True, power_t=0.5, random_state=None,
-       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
-       verbose=False, warm_start=True))
-
-#####################################################################################################
-gc.collect()
-
-clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
-       beta_2=0.999, early_stopping=False, epsilon=1e-08,
-       hidden_layer_sizes=(32,32,32), learning_rate='adaptive',
-       learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
-       nesterovs_momentum=True, power_t=0.5, random_state=None,
-       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
-       verbose=False, warm_start=True) )
-
-clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
-       beta_2=0.999, early_stopping=False, epsilon=1e-08,
-       hidden_layer_sizes=(32,32,32), learning_rate='adaptive',
-       learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
-       nesterovs_momentum=True, power_t=0.5, random_state=None,
-       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
-       verbose=False, warm_start=True))
-
+# clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+#        beta_2=0.999, early_stopping=False, epsilon=1e-08,
+#        hidden_layer_sizes=(64,64,64), learning_rate='adaptive',
+#        learning_rate_init=0.0001, max_iter=10000, momentum=0.9,
+#        nesterovs_momentum=True, power_t=0.5, random_state=None,
+#        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+#        verbose=False, warm_start=True))
 
 #####################################################################################################
-gc.collect()
-clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
-       beta_2=0.999, early_stopping=False, epsilon=1e-08,
-       hidden_layer_sizes=(16,16,16), learning_rate='adaptive',
-       learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
-       nesterovs_momentum=True, power_t=0.5, random_state=None,
-       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
-       verbose=False, warm_start=True) )
+# gc.collect()
 
-clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
-       beta_2=0.999, early_stopping=False, epsilon=1e-08,
-       hidden_layer_sizes=(16,16,16), learning_rate='adaptive',
-       learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
-       nesterovs_momentum=True, power_t=0.5, random_state=None,
-       shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
-       verbose=False, warm_start=True))
+# clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+#        beta_2=0.999, early_stopping=False, epsilon=1e-08,
+#        hidden_layer_sizes=(32,32,32), learning_rate='adaptive',
+#        learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
+#        nesterovs_momentum=True, power_t=0.5, random_state=None,
+#        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+#        verbose=False, warm_start=True) )
+
+# clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+#        beta_2=0.999, early_stopping=False, epsilon=1e-08,
+#        hidden_layer_sizes=(32,32,32), learning_rate='adaptive',
+#        learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
+#        nesterovs_momentum=True, power_t=0.5, random_state=None,
+#        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+#        verbose=False, warm_start=True))
+
+
+#####################################################################################################
+# gc.collect()
+# clf_sbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+#        beta_2=0.999, early_stopping=False, epsilon=1e-08,
+#        hidden_layer_sizes=(16,16,16), learning_rate='adaptive',
+#        learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
+#        nesterovs_momentum=True, power_t=0.5, random_state=None,
+#        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+#        verbose=False, warm_start=True) )
+
+# clf_dbp.append(MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+#        beta_2=0.999, early_stopping=False, epsilon=1e-08,
+#        hidden_layer_sizes=(16,16,16), learning_rate='adaptive',
+#        learning_rate_init=0.0001, max_iter=50000, momentum=0.9,
+#        nesterovs_momentum=True, power_t=0.5, random_state=None,
+#        shuffle=True, solver='adam', tol=1e-08, validation_fraction=0.1,
+#        verbose=False, warm_start=True))
 
 
 # #####################################################################################################
@@ -202,16 +202,21 @@ kf = KFold(n_splits = 2)
 y_s = np.array(y_s)
 y_d = np.array(y_d)
 
-x_s_final_train = np.array([])
-x_d_final_train = np.array([])
-x_s_final_test = np.array([])
-x_d_final_test = np.array([])
 
 for train_index, test_index in kf.split(X):
 	#print("TRAIN:", train_index, "TEST:", test_index)
+
+	x_s_final_train = np.array([])
+	x_d_final_train = np.array([])
+	x_s_final_test = np.array([])
+	x_d_final_test = np.array([])
+
+
 	X_train, X_test = X[train_index], X[test_index]
 	y_s_train, y_s_test = y_s[train_index], y_s[test_index]
 	y_d_train, y_d_test = y_d[train_index], y_d[test_index]
+
+	print("CROSS VALIDATION**********************************************")
 	
 	for i in range(NUMBER_OF_CLF):
 	    # if(i >= NUMBER_OF_CLF-2):
@@ -226,18 +231,18 @@ for train_index, test_index in kf.split(X):
 
 		######### pred on test data
 		y_s_pred_test = clf_sbp[i].predict(X_test)
-		y_d_pred_test = clf_sbp[i].predict(X_test)
+		y_d_pred_test = clf_dbp[i].predict(X_test)
 
 		print("y_s_pred_test.shape", y_s_pred_test.shape)
 		#prepare feature for final clf
 
-		np.concatenate((x_s_final_train, y_s_pred_train))
-		np.concatenate((x_d_final_train, y_d_pred_train))
+		x_s_final_train = np.concatenate((x_s_final_train, y_s_pred_train))
+		x_d_final_train = np.concatenate((x_d_final_train, y_d_pred_train))
 
-		np.concatenate((x_s_final_test, y_s_pred_test))
-		np.concatenate((x_d_final_test, y_d_pred_test))
+		x_s_final_test = np.concatenate((x_s_final_test, y_s_pred_test))
+		x_d_final_test = np.concatenate((x_d_final_test, y_d_pred_test))
 
-		print("****************************************************************************")
+		print("****************************************************************************\n")
 		print(clf_sbp[i],"\n")
 		print("clf", i)
 
@@ -249,16 +254,43 @@ for train_index, test_index in kf.split(X):
 		mse_d_test = np.mean((y_d_pred_test - y_d_test)**2)
 		print("TEST: MSE (sbp):", mse_s_test, " MSE (dbp):", mse_d_test)
 
-###################################################################################################
-np.reshape(x_s_final, (NUMBER_OF_CLF,-1))
-x_s_final = x_s_final.transpose()
+	###################################################################################################
+	x_s_final_train = np.reshape(x_s_final_train, (NUMBER_OF_CLF, -1))
+	x_s_final_train = x_s_final_train.transpose()
+	print("x_s_final_train.shape", x_s_final_train.shape)
 
-np.reshape(x_d_final, (NUMBER_OF_CLF,-1))
-x_d_final = x_d_final.transpose()
+	x_d_final_train = np.reshape(x_d_final_train, (NUMBER_OF_CLF, -1))
+	x_d_final_train = x_d_final_train.transpose()
 
-clf
+	x_s_final_test = np.reshape(x_s_final_test, (NUMBER_OF_CLF, -1))
+	x_s_final_test = x_s_final_test.transpose()
 
-print("training done for the final clf")
+	x_d_final_test = np.reshape(x_d_final_test, (NUMBER_OF_CLF, -1))
+	x_d_final_test = x_d_final_test.transpose()
+
+	print("x_s_final_test.shape", x_s_final_test.shape)
+
+
+	clf_final_sbp.fit(x_s_final_train, y_s_train)
+	clf_final_dbp.fit(x_d_final_train, y_d_train)
+
+	y_s_pred_train_final = clf_final_sbp.predict(x_s_final_train)
+	y_d_pred_train_final = clf_final_dbp.predict(x_d_final_train)
+
+
+	y_s_pred_test_final = clf_final_sbp.predict(x_s_final_test)
+	y_d_pred_test_final = clf_final_dbp.predict(x_d_final_test)
+
+	print("****************************************************************************\n")
+	print("FINAL CLF")
+
+	mse_s_train_final = np.mean((y_s_pred_train_final - y_s_train)**2)
+	mse_d_train_final = np.mean((y_d_pred_train_final - y_d_train)**2)
+	print("FINAL TRAINING: MSE (sbp) :", mse_s_train_final, " MSE (dbp):", mse_d_train_final)
+
+	mse_s_test_final = np.mean((y_s_pred_test_final - y_s_test)**2)
+	mse_d_test_final = np.mean((y_d_pred_test_final - y_d_test)**2)
+	print("FINAL TEST: MSE (sbp):", mse_s_test_final, " MSE (dbp):", mse_d_test_final)
 
 
 print("******************************* SEPERATELY, for the sake of checking the code above ******************************************")
