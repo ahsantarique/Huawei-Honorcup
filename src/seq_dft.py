@@ -132,8 +132,8 @@ clf_dbp = []
 # clf_sbp.append(LinearRegression(copy_X=True, fit_intercept=True, n_jobs=4, normalize=True))
 # clf_dbp.append(LinearRegression(copy_X=True, fit_intercept=True, n_jobs=4, normalize=True))
 
-# clf_sbp.append(SVR(tol=1e-8))
-# clf_dbp.append(SVR(tol=1e-8))
+clf_sbp.append(SVR(tol=1e-8))
+clf_dbp.append(SVR(tol=1e-8))
 # gc.collect()
 # clf_sbp.append(RandomForestRegressor(n_estimators=20000, n_jobs=4, max_depth=3))
 # clf_dbp.append(RandomForestRegressor(n_estimators=20000, n_jobs=4, max_depth=3))
@@ -177,16 +177,18 @@ for file in files:
 	spectre = np.fft.fft(ecg)
 	freq = np.fft.fftfreq(ecg.size, 1/rate)
 	mask = freq > 0
-	ecg_fft = np.abs(spectre[mask])[:ECG_DATA_POINTS]
-	ecg_fft = (np.array(ecg_fft)-np.mean(ecg_fft, axis=0))/(np.max(ecg_fft)-np.min(ecg_fft))
-
+	ecg_fft = np.abs(spectre[mask])
+	ecg_fft = ecg_fft[:ECG_DATA_POINTS]
+	#ecg_fft = np.log(ecg_fft)
+	ecg_fft = (np.array(ecg_fft)-np.mean(ecg_fft, axis=0))/(np.max(ecg_fft) - np.min(ecg_fft))
 
 	spectre = np.fft.fft(ppg)
 	freq = np.fft.fftfreq(ppg.size, 1/rate)
 	mask = freq > 0
-	ppg_fft = np.abs(spectre[mask])[:PPG_DATA_POINTS]
-	ppg_fft = (np.array(ppg_fft)-np.mean(ppg_fft, axis=0))/(np.max(ppg_fft)-np.min(ppg_fft))
-
+	ppg_fft = np.abs(spectre[mask])
+	ppg_fft = ppg_fft[:PPG_DATA_POINTS]
+	#ppg_fft = np.log(ppg_fft)
+	ppg_fft = (np.array(ppg_fft)-np.mean(ppg_fft, axis=0))/(np.max(ppg_fft) - np.min(ppg_fft))
 
 	fft_local = np.append(ecg_fft, ppg_fft)
 
