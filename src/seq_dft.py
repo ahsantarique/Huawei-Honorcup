@@ -24,7 +24,6 @@ ECG_DATA_POINTS = 60
 print("ECG_DATA_POINTS", ECG_DATA_POINTS)
 PPG_DATA_POINTS = 20
 # DISCARD_BACK = 5000
-TRAIN_TEST_RATIO = 0.5
 
 
 path = sys.argv[1]
@@ -132,13 +131,13 @@ clf_dbp = []
 # clf_sbp.append(LinearRegression(copy_X=True, fit_intercept=True, n_jobs=4, normalize=True))
 # clf_dbp.append(LinearRegression(copy_X=True, fit_intercept=True, n_jobs=4, normalize=True))
 
-clf_sbp.append(SVR(tol=1e-8))
-clf_dbp.append(SVR(tol=1e-8))
+# clf_sbp.append(SVR(tol=1e-8))
+# clf_dbp.append(SVR(tol=1e-8))
 # gc.collect()
 # clf_sbp.append(RandomForestRegressor(n_estimators=20000, n_jobs=4, max_depth=3))
 # clf_dbp.append(RandomForestRegressor(n_estimators=20000, n_jobs=4, max_depth=3))
 
-gc.collect()
+# gc.collect()
 clf_sbp.append(RandomForestRegressor(n_estimators=5000, n_jobs=4, max_depth=5, max_features='sqrt'))
 clf_dbp.append(RandomForestRegressor(n_estimators=5000, n_jobs=4, max_depth=5, max_features='sqrt'))
 
@@ -146,7 +145,7 @@ clf_dbp.append(RandomForestRegressor(n_estimators=5000, n_jobs=4, max_depth=5, m
 # clf_sbp.append(GradientBoostingRegressor(n_estimators=50))
 # clf_dbp.append(GradientBoostingRegressor(n_estimators=50))
 
-gc.collect()
+# gc.collect()
 clf_sbp.append(KNNR(algorithm='auto', leaf_size=30, metric='minkowski',
           metric_params=None, n_jobs=4, n_neighbors=10, p=2,
           weights='uniform') )
@@ -165,6 +164,10 @@ NUMBER_OF_CLF = len(clf_sbp)
 files = os.listdir(path)
 random.shuffle(files)
 for file in files:
+	if(count > 400 and count < 500):
+		count += 1
+		continue
+
 	data = np.loadtxt(path+'/'+file, delimiter=',', dtype='int')
 	y_local = data[0]
 
@@ -205,6 +208,7 @@ for file in files:
 	if(count > MAX_FILE_COUNT):
 		break
 
+
 print("done accumulating data...")
 
 
@@ -217,133 +221,63 @@ y_s = np.array(y_s)
 y_d = np.array(y_d)
 
 
-for train_index, test_index in kf.split(X):
-	#print("TRAIN:", train_index, "TEST:", test_index)
+X_train = X
+y_s_train = y_s
+y_d_train = y_d
 
-	x_s_final_train = np.array([])
-	x_d_final_train = np.array([])
-	x_s_final_test = np.array([])
-	x_d_final_test = np.array([])
-
-
-	X_train, X_test = X[train_index], X[test_index]
-	y_s_train, y_s_test = y_s[train_index], y_s[test_index]
-	y_d_train, y_d_test = y_d[train_index], y_d[test_index]
-
-	print("CROSS VALIDATION**********************************************")
-	
-	for i in range(NUMBER_OF_CLF):
-	    # if(i >= NUMBER_OF_CLF-2):
-	    # 	clf_sbp[i].n_estimators += 5
-	    # 	clf_dbp[i].n_estimators += 5
-		clf_sbp[i].fit(X_train, y_s_train)
-		clf_dbp[i].fit(X_train, y_d_train)
-
-		####### pred on train data
-		y_s_pred_train = clf_sbp[i].predict(X_train)
-		y_d_pred_train = clf_dbp[i].predict(X_train)
-
-		######### pred on test data
-		y_s_pred_test = clf_sbp[i].predict(X_test)
-		y_d_pred_test = clf_dbp[i].predict(X_test)
-
-		print("y_s_pred_test.shape", y_s_pred_test.shape)
-		#prepare feature for final clf
-
-		x_s_final_train = np.concatenate((x_s_final_train, y_s_pred_train))
-		x_d_final_train = np.concatenate((x_d_final_train, y_d_pred_train))
-
-		x_s_final_test = np.concatenate((x_s_final_test, y_s_pred_test))
-		x_d_final_test = np.concatenate((x_d_final_test, y_d_pred_test))
-
-		print("****************************************************************************\n")
-		print(clf_sbp[i],"\n")
-		print("clf", i)
-
-		mse_s_train = np.mean((y_s_pred_train - y_s_train)**2)
-		mse_d_train = np.mean((y_d_pred_train - y_d_train)**2)
-		print("TRAINING: MSE (sbp) :", mse_s_train, " MSE (dbp):", mse_d_train)
-
-		mse_s_test = np.mean((y_s_pred_test - y_s_test)**2)
-		mse_d_test = np.mean((y_d_pred_test - y_d_test)**2)
-		print("TEST: MSE (sbp):", mse_s_test, " MSE (dbp):", mse_d_test)
-
-	###################################################################################################
-	x_s_final_train = np.reshape(x_s_final_train, (NUMBER_OF_CLF, -1))
-	x_s_final_train = x_s_final_train.transpose()
-	print("x_s_final_train.shape", x_s_final_train.shape)
-
-	x_d_final_train = np.reshape(x_d_final_train, (NUMBER_OF_CLF, -1))
-	x_d_final_train = x_d_final_train.transpose()
-
-	x_s_final_test = np.reshape(x_s_final_test, (NUMBER_OF_CLF, -1))
-	x_s_final_test = x_s_final_test.transpose()
-
-	x_d_final_test = np.reshape(x_d_final_test, (NUMBER_OF_CLF, -1))
-	x_d_final_test = x_d_final_test.transpose()
-
-	print("x_s_final_test.shape", x_s_final_test.shape)
-
-
-	clf_final_sbp.fit(x_s_final_train, y_s_train)
-	clf_final_dbp.fit(x_d_final_train, y_d_train)
-
-	y_s_pred_train_final = clf_final_sbp.predict(x_s_final_train)
-	y_d_pred_train_final = clf_final_dbp.predict(x_d_final_train)
-
-
-	y_s_pred_test_final = clf_final_sbp.predict(x_s_final_test)
-	y_d_pred_test_final = clf_final_dbp.predict(x_d_final_test)
-
-	print("****************************************************************************\n")
-	print("FINAL CLF")
-	print(clf_final_sbp)
-
-	mse_s_train_final = np.mean((y_s_pred_train_final - y_s_train)**2)
-	mse_d_train_final = np.mean((y_d_pred_train_final - y_d_train)**2)
-	print("FINAL TRAINING: MSE (sbp) :", mse_s_train_final, " MSE (dbp):", mse_d_train_final)
-
-	mse_s_test_final = np.mean((y_s_pred_test_final - y_s_test)**2)
-	mse_d_test_final = np.mean((y_d_pred_test_final - y_d_test)**2)
-	print("FINAL TEST: MSE (sbp):", mse_s_test_final, " MSE (dbp):", mse_d_test_final)
-
-
-print("******************************* SEPERATELY, for the sake of checking the code above ******************************************")
+x_s_final_train = []
+x_d_final_train = []
 
 for i in range(NUMBER_OF_CLF):
-	print("****************************************************************************")
+    # if(i >= NUMBER_OF_CLF-2):
+    # 	clf_sbp[i].n_estimators += 5
+    # 	clf_dbp[i].n_estimators += 5
+	clf_sbp[i].fit(X_train, y_s_train)
+	clf_dbp[i].fit(X_train, y_d_train)
+
+	####### pred on train data
+	y_s_pred_train = clf_sbp[i].predict(X_train)
+	y_d_pred_train = clf_dbp[i].predict(X_train)
+
+	#prepare feature for final clf
+
+	x_s_final_train = np.concatenate((x_s_final_train, y_s_pred_train))
+	x_d_final_train = np.concatenate((x_d_final_train, y_d_pred_train))
+
+	print("****************************************************************************\n")
 	print(clf_sbp[i],"\n")
 	print("clf", i)
-	score_s = cross_val_score(clf_sbp[i], X, y_s, cv=2, scoring='neg_mean_squared_error')
-	score_d = cross_val_score(clf_dbp[i], X, y_d, cv=2, scoring='neg_mean_squared_error')
-	print(score_s)
-	print(score_d)
-	print("****************************************************************************")
 
-# mse = 0
-# count = 0
-# for file in os.listdir(path):
-# 	data = np.loadtxt(path+'/'+file, delimiter=',', dtype='int')
-# 	y_local = data[0]
-#	X_local = data[DISCARD_FRONT:DISCARD_FRONT+DATA_POINTS].flatten()
-
-# 	X_local = (np.array(X_local)-np.mean(X_local, axis=0))/(np.max(X_local)-np.min(X_local))  # normalization
-# 	y_s = y_local[0]
-# 	y_d = y_local[1]
-
-# 	y_s_pred = np.mean([np.mean(clf_sbp[i].predict(X_local)) for i in range(NUMBER_OF_CLF)])
-# 	y_d_pred = np.mean([np.mean(clf_dbp[i].predict(X_local)) for i in range(NUMBER_OF_CLF)])
-	
-# 	mse += (y_s_pred - y_s)**2 + 2*((y_d_pred - y_d)**2)
+	mse_s_train = np.mean((y_s_pred_train - y_s_train)**2)
+	mse_d_train = np.mean((y_d_pred_train - y_d_train)**2)
+	print("TRAINING: MSE (sbp) :", mse_s_train, " MSE (dbp):", mse_d_train)
 
 
-# 	count += 1
-# 	if(count % 100 == 0):
-# 		print("completed {} files".format(count))
-# 	if(count > MAX_FILE_COUNT):
-# 		break
+###################################################################################################
+x_s_final_train = np.reshape(x_s_final_train, (NUMBER_OF_CLF, -1))
+x_s_final_train = x_s_final_train.transpose()
+print("x_s_final_train.shape", x_s_final_train.shape)
 
-# print("MSE:", mse/count)
+x_d_final_train = np.reshape(x_d_final_train, (NUMBER_OF_CLF, -1))
+x_d_final_train = x_d_final_train.transpose()
+
+
+
+clf_final_sbp.fit(x_s_final_train, y_s_train)
+clf_final_dbp.fit(x_d_final_train, y_d_train)
+
+y_s_pred_train_final = clf_final_sbp.predict(x_s_final_train)
+y_d_pred_train_final = clf_final_dbp.predict(x_d_final_train)
+
+print("****************************************************************************\n")
+print("FINAL CLF")
+print(clf_final_sbp)
+
+mse_s_train_final = np.mean((y_s_pred_train_final - y_s_train)**2)
+mse_d_train_final = np.mean((y_d_pred_train_final - y_d_train)**2)
+print("FINAL TRAINING: MSE (sbp) :", mse_s_train_final, " MSE (dbp):", mse_d_train_final)
+
+
 for i in range(NUMBER_OF_CLF):
 	joblib.dump(clf_sbp[i], 'clf_sbp'+str(i)+'.pkl', compress=9)
 	joblib.dump(clf_dbp[i], 'clf_dbp'+str(i)+'.pkl', compress=9)
